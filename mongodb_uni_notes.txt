@@ -1,0 +1,5 @@
+nosql database - not only
+	huge number of types of db
+	data stored as organised documents typically with common fields (collection)
+document: field-value pairs (name, value)
+collection: many documents organised
