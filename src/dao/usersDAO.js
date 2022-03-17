@@ -90,8 +90,9 @@ export default class UsersDAO {
       // Use an UPSERT statement to update the "jwt" field in the document,
       // matching the "user_id" field with the email passed to this function.
       await sessions.updateOne(
-        { someField: "someValue" },
-        { $set: { someOtherField: "someOtherValue" } },
+        { user_id: email },
+        { $set: { jwt: jwt } },
+        { upsert: true },
       )
       return { success: true }
     } catch (e) {
@@ -107,9 +108,9 @@ export default class UsersDAO {
    */
   static async logoutUser(email) {
     try {
-      // TODO Ticket: User Management
+      // COMPLETE Ticket: User Management
       // Delete the document in the `sessions` collection matching the email.
-      await sessions.deleteOne({ someField: "someValue" })
+      await sessions.deleteOne({ user_id: email })
       return { success: true }
     } catch (e) {
       console.error(`Error occurred while logging out user, ${e}`)
@@ -125,9 +126,9 @@ export default class UsersDAO {
    */
   static async getUserSession(email) {
     try {
-      // TODO Ticket: User Management
+      // COMPLETE Ticket: User Management
       // Retrieve the session document corresponding with the user's email.
-      return sessions.findOne({ someField: "someValue" })
+      return sessions.findOne({ email: email })
     } catch (e) {
       console.error(`Error occurred while retrieving user session, ${e}`)
       return null
