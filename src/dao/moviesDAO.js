@@ -195,12 +195,14 @@ export default class MoviesDAO {
     to complete this task, but you might have to do something about `const`.
     */
 
-    const queryPipeline = [
+    let queryPipeline = [
       matchStage,
       sortStage,
       // TODO Ticket: Faceted Search
       // Add the stages to queryPipeline in the correct order.
     ]
+
+    queryPipeline.push(skipStage, limitStage, facetStage)
 
     try {
       const results = await (await movies.aggregate(queryPipeline)).next()
@@ -263,8 +265,8 @@ export default class MoviesDAO {
 
     // TODO Ticket: Paging
     // Use the cursor to only return the movies that belong on the current page
-    const displayCursor = cursor.limit(moviesPerPage).skip(page * moviesPerPage)
-
+    const displayCursor = cursor.limit(moviesPerPage).skip(page * moviesPerPage) //  THIS WAS A VERY INTERESTING TICKET because paging invokes state management, which is handled by front end interacting with movies.controller.js
+    //  https://www.mongodb.com/community/forums/t/conceptual-question-about-paging/89596/10
     try {
       const moviesList = await displayCursor.toArray()
       const totalNumMovies = page === 0 ? await movies.countDocuments(query) : 0
