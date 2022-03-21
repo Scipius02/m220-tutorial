@@ -43,9 +43,15 @@ export default class CommentsDAO {
    */
   static async addComment(movieId, user, comment, date) {
     try {
-      // TODO Ticket: Create/Update Comments
+      // COMPLETE Ticket: Create/Update Comments
       // Construct the comment document to be inserted into MongoDB.
-      const commentDoc = { someField: "someValue" }
+      const commentDoc = {
+        movie_id: ObjectId(movieId), // movieId is an ObjectId in the db
+        name: user.name, // you did not notice that user is an object (written in comments above)
+        email: user.email,
+        text: comment,
+        date: date,
+      }
 
       return await comments.insertOne(commentDoc)
     } catch (e) {
