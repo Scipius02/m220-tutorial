@@ -297,12 +297,24 @@ export default class MoviesDAO {
       stage that searches the `comments` collection for the correct comments.
       */
 
-      // TODO Ticket: Get Comments
+      // COMPLETE Ticket: Get Comments
       // Implement the required pipeline.
       const pipeline = [
+        // note aggregation syntax, TODO take aggregation pipeline tutorial
         {
           $match: {
             _id: ObjectId(id),
+          },
+        },
+        {
+          $lookup: {
+            from: "comments",
+            let: { id: "$_id" },
+            pipeline: [
+              { $match: { $expr: { $eq: ["$movie_id", "$$id"] } } },
+              { $sort: { date: -1 } },
+            ],
+            as: "comments",
           },
         },
       ]
